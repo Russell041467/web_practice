@@ -355,6 +355,43 @@
         </div>
       </section>
 
+      <section id="dog" class="section section-dog" aria-label="隨機狗狗">
+        <div class="container">
+          <header class="section-header section-header--center reveal">
+            <p class="section-label">Fun</p>
+            <h2 class="section-title">隨機狗狗</h2>
+            <p class="section-lead">
+              點擊按鈕，從 Dog CEO API 取得一張可愛的狗狗照片。
+            </p>
+          </header>
+
+          <div class="dog-widget reveal">
+            <div class="dog-display" id="dog-display">
+              <div class="dog-placeholder" id="dog-placeholder">
+                <span class="dog-placeholder__icon" aria-hidden="true">🐾</span>
+                <p>點擊下方按鈕，遇見一位新朋友</p>
+              </div>
+              <div class="dog-loading is-hidden" id="dog-loading" aria-hidden="true">
+                <span class="dog-loading__spinner" aria-hidden="true"></span>
+                <span class="dog-loading__text">載入中…</span>
+              </div>
+              <img
+                class="dog-img is-hidden"
+                id="dog-img"
+                alt="隨機狗狗照片"
+                width="480"
+                height="360"
+              />
+            </div>
+
+            <button type="button" class="btn btn--primary" id="dog-btn">
+              隨機狗狗
+            </button>
+            <p class="dog-error is-hidden" id="dog-error" role="alert"></p>
+          </div>
+        </div>
+      </section>
+
       <section class="cta-banner" aria-label="行動呼籲">
         <div class="cta-banner__bg" aria-hidden="true"></div>
         <div class="container cta-banner__inner reveal">

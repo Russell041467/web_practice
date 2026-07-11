@@ -299,6 +299,76 @@
     }
   }
 
+  function initRandomDog() {
+    const dogBtn = document.getElementById("dog-btn");
+    const dogImg = document.getElementById("dog-img");
+    const dogPlaceholder = document.getElementById("dog-placeholder");
+    const dogLoading = document.getElementById("dog-loading");
+    const dogError = document.getElementById("dog-error");
+
+    if (!dogBtn || !dogImg || !dogPlaceholder || !dogLoading || !dogError) {
+      return;
+    }
+
+    const API_URL = "https://dog.ceo/api/breeds/image/random";
+
+    function setState(state) {
+      const isIdle = state === "idle";
+      const isLoading = state === "loading";
+      const isLoaded = state === "loaded";
+
+      dogPlaceholder.classList.toggle("is-hidden", !isIdle);
+      dogLoading.classList.toggle("is-hidden", !isLoading);
+      dogLoading.setAttribute("aria-hidden", String(!isLoading));
+      dogImg.classList.toggle("is-hidden", !isLoaded);
+      dogError.classList.toggle("is-hidden", state !== "error");
+      dogBtn.disabled = isLoading;
+      dogBtn.setAttribute("aria-busy", String(isLoading));
+    }
+
+    function loadImage(url) {
+      return new Promise(function (resolve, reject) {
+        dogImg.onload = function () {
+          dogImg.onload = null;
+          dogImg.onerror = null;
+          resolve();
+        };
+        dogImg.onerror = function () {
+          dogImg.onload = null;
+          dogImg.onerror = null;
+          reject(new Error("圖片載入失敗"));
+        };
+        dogImg.src = url;
+      });
+    }
+
+    async function fetchRandomDog() {
+      setState("loading");
+      dogError.textContent = "";
+
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("無法取得圖片，請稍後再試");
+        }
+
+        const data = await response.json();
+        if (data.status !== "success" || !data.message) {
+          throw new Error("API 回應格式錯誤");
+        }
+
+        await loadImage(data.message);
+        setState("loaded");
+      } catch (err) {
+        dogError.textContent =
+          err instanceof Error ? err.message : "發生錯誤，請稍後再試";
+        setState(dogImg.src ? "loaded" : "error");
+      }
+    }
+
+    dogBtn.addEventListener("click", fetchRandomDog);
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initTheme();
     if (themeToggle) {
@@ -312,5 +382,6 @@
     initCounters();
     initProjectsDrag();
     initYear();
+    initRandomDog();
   });
 })();
